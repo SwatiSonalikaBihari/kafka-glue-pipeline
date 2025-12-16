@@ -1,0 +1,43 @@
+{
+  "name" : "abc",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::746252170258:role/Iam_Glue",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "gluestreaming",
+    "scriptLocation" : "s3://aws-glue-assets-746252170258-ap-south-1/scripts/abc.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-746252170258-ap-south-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-observability-metrics" : "false",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-746252170258-ap-south-1/temporary/"
+  },
+  "connections" : {
+    "connections" : [ "Kafka connection" ]
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 2,
+  "maxCapacity" : 2.0,
+  "glueVersion" : "5.0",
+  "numberOfWorkers" : 2,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1765871618847\":{\"S3GlueParquetTarget\":{\"AutoDataQuality\":{\"IsEnabled\":false},\"Compression\":\"snappy\",\"Inputs\":[\"node-1765871310821\"],\"Name\":\"Amazon S3\",\"NumberTargetPartitions\":\"0\",\"PartitionKeys\":[],\"Path\":\"s3://akhil-iceberg/Json/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false}}},\"node-1765871310821\":{\"DirectKafkaSource\":{\"DetectSchema\":true,\"Name\":\"Apache Kafka\",\"StreamingOptions\":{\"Classification\":\"json\",\"ConnectionName\":\"Kafka connection\",\"StartingOffsets\":\"earliest\",\"TopicName\":\"swati\"},\"WindowSize\":100}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "kafka-glue-pipeline",
+    "branch" : "main",
+    "folder" : "abc"
+  }
+}
