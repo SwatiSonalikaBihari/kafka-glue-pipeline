@@ -3,4 +3,12 @@ version: 0.2
 phases:
   build:
     commands:
-      - echo "Hello from CodeBuild"
+      - echo "Uploading Glue script to S3"
+      - aws s3 cp script/ s3://swati-glue-scripts-ap-south-1/script/ --recursive
+
+      - echo "Updating Glue job abc"
+      - aws glue update-job \
+          --job-name abc \
+          --job-update Command="{Name=glueetl,ScriptLocation=s3://swati-glue-scripts-ap-south-1/script/script.py}"
+
+
