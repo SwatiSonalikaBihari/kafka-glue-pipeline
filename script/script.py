@@ -1,22 +1,5 @@
-# Generated from: s3 transformation data.ipynb
-# Converted at: 2025-12-17T09:23:29.711Z
-# Next step (optional): refactor into modules & generate tests with RunCell
-# Quick start: pip install runcell
-
-# # AWS Glue Studio Notebook
-# ##### You are now running a AWS Glue Studio notebook; To start using your notebook you need to start an AWS Glue Interactive Session.
-# 
-
-
-# #### Optional: Run this cell to see available notebook commands ("magics").
-# 
-
-
-# #### Example: Write the data in the DynamicFrame to a location in Amazon S3 and a table for it in the AWS Glue Data Catalog
-# 
-
-
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, from_unixtime, to_timestamp, when
 
 # Glue notebook already provides SparkSession
 spark = SparkSession.builder.getOrCreate()
@@ -24,23 +7,51 @@ spark = SparkSession.builder.getOrCreate()
 database_name = "default"
 table_name = "ingest_year_2025"
 
-# Read table from Glue Data Catalog as Spark DataFrame
+# Read table from Glue Data Catalog
 df = spark.read.table(f"{database_name}.{table_name}")
 
-# Show data
+print("🔹 Source Data")
 df.show(truncate=False)
 
+# -------------------------------
+# Small & Simple Transformation
+# -------------------------------
 
-from pyspark.sql.functions import col, from_unixtime, to_timestamp
+df_transformed = (
+    df
+    # Convert epoch milliseconds to timestamp
+    .withColumn(
+        "event_time",
+        to_timestamp(from_unixtime(col("ts") / 1000))
+    )
+    # Add a simple derived column
+    .withColumn(
+        "amount_category",
+        when(col("amount") < 100, "LOW")
+        .when((col("amount") >= 100) & (col("amount") <= 500), "MEDIUM")
+        .otherwise("HIGH")
+    )
+)
 
-df_out = df.withColumn(
-    "event_time",
-    to_timestamp(from_unixtime(col("ts") / 1000))
-).show()
-print("CI/CD test - version 1")
+print("🔹 Transformed Data")
+df_transformed.show(truncate=False)
 
+print("CI/CD test - version 2")
 
-s3_output_path = "s3://akhil-iceberg/script_new/"
+# -------------------------------
+# Write ORIGINAL data
+# -------------------------------
+s3_output_raw = "s3://akhil-iceberg/script_new/raw/"
+
 df.write \
-    .format("JSON") \
-    .mode("overwrite").save(s3_output_path)
+    .mode("overwrite") \
+    .json(s3_output_raw)
+
+# -------------------------------
+# Write TRANSFORMED data
+# -------------------------------
+s3_output_transformed = "s3://akhil-iceberg/script_new/transformed/"
+
+df_transformed.write \
+    .mode("overwrite") \
+    .json(s3_output_transformed)
