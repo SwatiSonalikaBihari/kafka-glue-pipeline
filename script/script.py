@@ -37,6 +37,7 @@ df_out = df.withColumn(
     "event_time",
     to_timestamp(from_unixtime(col("ts") / 1000))
 ).show()
+print("CI/CD test - version 1")
 
 
 s3_output_path = "s3://akhil-iceberg/script_new/"
