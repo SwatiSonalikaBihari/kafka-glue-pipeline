@@ -6,7 +6,7 @@ phases:
       - echo "Uploading Glue script to S3"
       - aws s3 cp script/ s3://akhil-iceberg/swati-glue-scripts-ap-south-1/script/ --recursive
 
-      - echo "Updating Glue transformation job: script"
+      - echo "Updating Glue transformation job:script"
       - |
         aws glue update-job \
           --job-name script \
