@@ -11,9 +11,9 @@ phases:
         aws glue update-job \
           --job-name script \
           --job-update '{
-            "Role": "arn:aws:iam::746252170258:role/Iam_glue",
+            "Role":"arn:aws:iam::746252170258:role/Iam_glue",
             "Command": {
-              "Name": "glueetl",
-              "ScriptLocation": "s3://akhil-iceberg/swati-glue-scripts-ap-south-1/script/script.py"
+              "Name":"glueetl",
+              "ScriptLocation":"s3://akhil-iceberg/swati-glue-scripts-ap-south-1/script/script.py"
             }
           }'
