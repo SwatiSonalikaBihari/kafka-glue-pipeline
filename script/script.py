@@ -1,12 +1,11 @@
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, from_unixtime, to_timestamp
 spark = SparkSession.builder.getOrCreate()
 database_name = "default"
 table_name = "ingest_year_2025"
 df = spark.read.table(f"{database_name}.{table_name}")
 df.show(truncate=False)
 
-
-from pyspark.sql.functions import col, from_unixtime, to_timestamp
 
 df_out = df.withColumn(
     "event_time",
