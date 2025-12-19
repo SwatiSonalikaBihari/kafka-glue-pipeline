@@ -13,7 +13,7 @@ df_out = df.withColumn(
 ).show()
 
 
-s3_output_path = "s3://akhil-iceberg/transformed_data-new/"
+s3_output_path = "s3://akhil-iceberg/transformed/featured/"
 df.write \
     .format("JSON") \
     .mode("overwrite").save(s3_output_path)
