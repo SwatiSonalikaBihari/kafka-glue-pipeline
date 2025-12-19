@@ -5,7 +5,7 @@ database_name = "default"
 table_name = "ingest_year_2025"
 df = spark.read.table(f"{database_name}.{table_name}")
 df.show(truncate=False)
-
+print("New__Feature")
 
 df_out = df.withColumn(
     "event_time",
